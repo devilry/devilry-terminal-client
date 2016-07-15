@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 if __name__ == '__main__':
     import sys
-    from bin import utils
+    from lib import utils
 
     try:
         command = sys.argv[1]
