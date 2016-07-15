@@ -25,11 +25,11 @@ class Client(object):
         if key:
             self.headers = {'Authorization': 'Token {}'.format(key)}
 
-    def api(self, path):
+    def api(self, path, **kwargs):
         """
         Returns Api class for path
 
         Returns:
             :class:`~api_client.api.Api`
         """
-        return Api('{}{}'.format(self.url, path), self.headers)
+        return Api('{}{}'.format(self.url, path), headers=self.headers, **kwargs)

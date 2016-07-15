@@ -16,8 +16,10 @@ class Api(object):
         api.get()
     """
 
-    def __init__(self, url, headers=None):
+    def __init__(self, url, headers=None, queryparams=None, **kwargs):
         self.url = url
+        if queryparams:
+            self.url += queryparams
         self.headers = headers or {}
 
     def handle_errors(self, status_code):
