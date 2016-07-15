@@ -1,7 +1,3 @@
-#!/usr/bin/env python3
-import sys
-sys.path.append('..')
-
 from requests import api
 
 from devilry_api import exceptions
@@ -36,6 +32,10 @@ class Api(object):
 			raise exceptions.HTTP403
 		if status_code == 404:
 			raise exceptions.HTTP404
+		if status_code == 405:
+			raise exceptions.HTTP405
+		if status_code == 529:
+			raise exceptions.HTTP429
 		if status_code == 503:
 			raise exceptions.HTTP503
 
