@@ -33,9 +33,3 @@ class Client(object):
             :class:`~api_client.api.Api`
         """
         return Api('{}{}'.format(self.url, path), self.headers)
-
-# if __name__ == '__main__':
-#     client = Client('http://localhost:8000/api/')
-#     client.auth(key='61d4d0b047b4d753c29d1756a4a656045c7df521')
-#     api = client.api('student/assignment-list/')
-#     print(api.get().content)

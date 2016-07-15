@@ -1,7 +1,7 @@
-import sys
-from os.path import dirname, join, exists
-from os import listdir
 import importlib
+import sys
+from os import listdir
+from os.path import dirname, join, exists
 
 
 def execute(command, args):
@@ -10,7 +10,10 @@ def execute(command, args):
     """
     path = join(getpluginsdir(), command + ".py")
     if exists(path):
-        print('wohoo')
+        plugin = 'plugins.{}'.format(command)
+        getattr(importlib.import_module(plugin), 'plugin')(args)
+    else:
+        showhelp()
 
 
 def showhelp():
@@ -23,7 +26,7 @@ def showhelp():
     for cmd in commands:
         plugin = 'plugins.{}'.format(cmd[:-3])
         try:
-            description = getattr(importlib.import_module(plugin), 'description')()
+            description = getattr(importlib.import_module(plugin), 'plugin').description()
         except AttributeError:
             description = 'No description'
         print('     {}: {}'.format(cmd[:-3], description))
