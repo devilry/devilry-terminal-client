@@ -1,4 +1,4 @@
-from lib.plugin_base import PluginBase
+from devilryclientlib.plugin_base import PluginBase
 from api_client.client import Client
 from requests.exceptions import HTTPError
 

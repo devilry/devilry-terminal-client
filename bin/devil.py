@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 if __name__ == '__main__':
     import sys
-    from lib import utils
+    from devilryclientlib import utils
 
     try:
         command = sys.argv[1]
