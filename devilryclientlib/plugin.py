@@ -60,7 +60,7 @@ class BaseApiPlugin(BasePlugin):
         should be search.
         """
         arguments = vars(args)
-        if arguments['query_string']:
+        if hasattr(args, 'query_string') and arguments['query_string']:
             return arguments['query_string']
         if not self.queryparams:
             return ''
@@ -68,7 +68,9 @@ class BaseApiPlugin(BasePlugin):
         for param in self.queryparams:
             if arguments[param]:
                 query += '&{}={}'.format(param, arguments[param])
-        return '?{}'.format(query[1:])
+        if query:
+            return '?{}'.format(query[1:])
+        return ''
 
     def list_prettyprint(self, json_list):
         """
