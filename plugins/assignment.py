@@ -1,64 +1,71 @@
-from devilryclientlib.plugin_base import PluginBase
-from api_client.client import Client
+import argparse
+
 from requests.exceptions import HTTPError
 
+from api_client.client import Client
+from devilryclientlib.plugin import BaseApiPlugin
 
-class Assignment(PluginBase):
 
-    url = 'http://localhost:8000/api'
-
-    def parse_arguments(self, args):
-        self.parser.usage = 'devil assignment [-h] [-k KEY] -r {student,examiner,admin} [-q QUERY_STRING] [-l]'
-        self.parser.add_argument('-k', '--key', help='Your api key', dest='key', default=None)
-        self.parser.add_argument('-r', '--role', dest='role',
-                                 required=True, help='Choose role: student, examiner, admin',
-                                 choices=['student', 'examiner', 'admin'])
-        self.parser.add_argument('-q', '--query-string', dest='query_string',
-                                 help='query string \"?id=2&order=name\"')
-        self.parser.add_argument('-l', '--list', dest='list', action='store_true',
-                                 help='list assignments', default=False)
-        self.parser.add_argument('-o', '--ordering', dest='ordering',
-                                 choices=['publishing_date', 'publishing_time', 'short_name',
-                                          '-publishing_date', '-publishing_time', '-short_name'], default=None,
-                                 help='Choose order, \'-\' prefix for descending order')
-        self.parser.add_argument('-s', '--search', dest='search', help='search field(semester, subject)', default=None)
-        self.parser.add_argument('--subject', dest='subject', help='filter subject', default=None)
-        self.parser.add_argument('--semester', dest='semester', help='filter semester', default=None)
-        self.args = self.parser.parse_args(args)
+class Assignment(BaseApiPlugin):
+    queryparams = ['ordering', 'search', 'subject', 'semester']
 
     def __init__(self, args):
         super(Assignment, self).__init__()
-        self.parse_arguments(args)
-        self.run()
+        self.core_parser()
+        self.list_arguments()
+        self.run(args)
 
     @classmethod
     def description(cls):
-        return 'list/get assignment'
+        return 'Assignment list/get'
 
-    def parse_query_dict(self):
-        dict = {}
-        if self.args.ordering:
-            dict['ordering'] = self.args.ordering
-        if self.args.search:
-            dict['search'] = self.args.search
-        if self.args.subject:
-            dict['subject'] = self.args.subject
-        if self.args.semester:
-            dict['semester'] = self.args.semester
-        return dict
+    def run(self, args):
+        args = self.parser.parse_args(args)
+        args.func(args)
 
-    def list(self):
+    def core_parser(self):
+        """
+        Initialize the core parser
+        """
+        self.parser = argparse.ArgumentParser(description=self.description(), prog='devil assignment')
+        self.subparsers = self.parser.add_subparsers(help='Commands')
+
+    def common_arguments(self, parser):
+        """
+        Adds common arguments to the passed parser
+        """
+        parser.add_argument('-k', '--key', help='Your api key', dest='key', default=None)
+        parser.add_argument('-r', '--role', dest='role',
+                            required=True, help='Choose role: student, examiner, admin',
+                            choices=['student', 'examiner', 'admin'])
+
+    def list_arguments(self):
+        """
+        arguments for the subparser list
+        """
+        self.list_parser = self.subparsers.add_parser('list', help='list assignments')
+        self.common_arguments(self.list_parser)
+        self.list_parser.add_argument('-q', '--query-string', dest='query_string',
+                                      help='query string \"?id=2&order=name\"')
+        self.list_parser.add_argument('-o', '--ordering', dest='ordering',
+                                      choices=['publishing_date', 'publishing_time', 'short_name',
+                                               '-publishing_date', '-publishing_time', '-short_name'], default=None,
+                                      help='Choose order, \'-\' prefix for descending order')
+        self.list_parser.add_argument('-s', '--search', dest='search', help='search field(semester, subject)', default=None)
+        self.list_parser.add_argument('--subject', dest='subject', help='filter subject', default=None)
+        self.list_parser.add_argument('--semester', dest='semester', help='filter semester', default=None)
+        self.list_parser.set_defaults(func=self.list)
+
+    def list(self, args):
+        """
+        If the subparser list is being used this function is called.
+        """
         client = Client(self.url)
-        client.auth(key=self.args.key)
-        api = client.api('/student/assignment/list/', queryparms=self.query_parser(self.parse_query_dict()))
+        client.auth(args.key)
         try:
-            print(api.get().content)
+            api = client.api('student/assignment/list')
+            self.list_prettyprint(api.get().json())
         except HTTPError as e:
-            print(str(e))
-
-    def run(self):
-        if self.args.list:
-            self.list()
-
+            print(e)
 
 plugin = Assignment
