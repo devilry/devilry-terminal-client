@@ -3,7 +3,7 @@ Terminal API and client for handling terminal management and customized tasks. C
 
 How to create plugins
 ===================
-Plugins will be installed in the plugins folder, and <your plugin>.py must be named as the plugin command.
+Plugins will be installed in the plugins folder, and "your plugin".py must be named as the plugin command.
 
 Example:
 ```{r, engine='bash', count_lines}
