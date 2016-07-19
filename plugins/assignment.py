@@ -9,11 +9,10 @@ from devilryclientlib.plugin import BaseApiPlugin
 class Assignment(BaseApiPlugin):
     queryparams = ['ordering', 'search', 'subject', 'semester']
 
-    def __init__(self, args):
+    def __init__(self):
         super(Assignment, self).__init__()
         self.core_parser()
         self.list_arguments()
-        self.run(args)
 
     @classmethod
     def description(cls):

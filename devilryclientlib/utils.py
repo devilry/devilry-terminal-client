@@ -11,7 +11,8 @@ def execute(command, args):
     path = join(getpluginsdir(), command + ".py")
     if exists(path):
         plugin = 'plugins.{}'.format(command)
-        getattr(importlib.import_module(plugin), 'plugin')(args)
+        plugin = getattr(importlib.import_module(plugin), 'plugin')()
+        plugin.run(args)
     else:
         showhelp()
 
@@ -21,8 +22,8 @@ def showhelp():
     Print the help menu
     """
     commands = getcommandlist()
-    print('Usage: {} <action> <args>'.format(sys.argv[0]))
-    print('Actions:')
+    print('Usage: {} <command> <args>'.format(sys.argv[0]))
+    print('Commands:')
     for cmd in commands:
         plugin = 'plugins.{}'.format(cmd[:-3])
         try:
