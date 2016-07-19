@@ -10,7 +10,7 @@ Example:
 $ tree
 ├── plugins
 │   ├── myplugin.py
-│   └── __init__.py
+│   ...
 $ devil
 usage: devil <command> <args>
 $ devil myplugin -h
