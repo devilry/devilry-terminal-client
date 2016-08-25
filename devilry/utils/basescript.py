@@ -1,6 +1,6 @@
 
 
-class BasePlugin(object):
+class BaseScript(object):
 
     @property
     def command(cls):

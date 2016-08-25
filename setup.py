@@ -9,8 +9,9 @@ setup(
       packages=find_packages(),
       include_package_data=True,
       install_requires=[
-          'setuptools',
-          'requests==2.10.0',
+            'setuptools',
+            'requests==2.10.0',
+            'termcolor==1.1.0'
       ],
       entry_points={
             'console_scripts': ['devil = devilry.devilcli:main']

@@ -4,15 +4,16 @@ from devilry.settings import API_URL
 from devilry.devilry_api.base import BaseAPi
 
 
-class Assignment(BaseAPi):
+class AssignmentGroup(BaseAPi):
 
-    url = 'assignment/'
+    url = 'assignment-group/'
     query_params = ['ordering',
                     'search',
                     'period_short_name',
                     'subject_short_name',
-                    'short_name',
-                    'id']
+                    'assignment_short_name',
+                    'id',
+                    'assignment_id']
 
     def __init__(self, key, action=None, role=None, **kwargs):
         # check role

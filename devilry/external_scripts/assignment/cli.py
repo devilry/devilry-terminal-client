@@ -1,11 +1,11 @@
-from devilry.utils.baseplugin import BasePlugin
+from devilry.utils.basescript import BaseScript
 from devilry.devilry_api.assignment import Assignment as AssignmentApi
 from requests.exceptions import HTTPError
 from devilry.utils import colorize
 
 
-class Assignment(BasePlugin):
-    
+class Assignment(BaseScript):
+
     command = 'assignment'
 
     @classmethod
@@ -18,16 +18,26 @@ class Assignment(BasePlugin):
                             choices=['publishing_date', 'publishing_time', 'short_name',
                                      '-publishing_date', '-publishing_time', '-short_name'],
                             default=None)
-        parser.add_argument('-s', '--search', dest='search', help='search field(semester, subject)')
-        parser.add_argument('--subject', dest='subject', help='filter subject')
-        parser.add_argument('--semester', dest='semester', help='filter semester')
-        parser.add_argument('--format', dest='foramt', choices=['json', 'pretty'], default='pretty')
+        parser.add_argument('-s', '--search', dest='search', help='search field(semester, subject, assignment name)')
+        parser.add_argument('--subject', dest='subject_short_name', help='filter subject')
+        parser.add_argument('--semester', dest='period_short_name', help='filter semester')
+        parser.add_argument('--assignment-name', dest='short_name', help='filter name of assignment')
+        parser.add_argument('--id', dest='id', help='id of assignment')
+        parser.add_argument('--format', dest='format', choices=['json', 'pretty'], default='pretty')
         parser.set_defaults(func=Assignment.run)
 
     @classmethod
     def run(cls, args):
         try:
-            api = AssignmentApi(args.key, role=args.role, action=args.action)
+            kwargs = dict(
+                search=args.search,
+                ordering=args.ordering,
+                subject_short_name=args.subject_short_name,
+                period_short_name=args.period_short_name,
+                short_name=args.short_name,
+                id=args.id
+            )
+            api = AssignmentApi(args.key, role=args.role, action=args.action, **kwargs)
         except HTTPError as e:
             print(colorize.colored_text(e, colorize.COLOR_RED))
             raise SystemExit()

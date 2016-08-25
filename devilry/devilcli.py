@@ -3,14 +3,14 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from devilry.external_plugins.config import INSTALLED_PLUGINS
+from devilry.external_scripts.config import INSTALLED_SCRIPTS
 
 
 def main():
     parser = argparse.ArgumentParser(prog='devil')
     subparsers = parser.add_subparsers(help='Commands')
 
-    for plugin in INSTALLED_PLUGINS:
+    for plugin in INSTALLED_SCRIPTS:
         plugin.add_to_subparser(subparsers)
 
     args = parser.parse_args()
