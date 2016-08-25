@@ -1,4 +1,3 @@
-
 DEV = True
 
 if DEV:

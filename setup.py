@@ -1,6 +1,7 @@
 from setuptools import setup, find_packages
 
-setup(name='devilry-terminal-client',
+setup(
+      name='devilry-terminal-client',
       author=(u'Eskil Opdahl Nordland'),
       author_email='devilry-contact@googlegroups.com',
       url='http://devilry.org',
@@ -10,5 +11,8 @@ setup(name='devilry-terminal-client',
       install_requires=[
           'setuptools',
           'requests==2.10.0',
-      ]
-      )
+      ],
+      entry_points={
+            'console_scripts': ['devil = devilry.devilcli:main']
+      }
+)
