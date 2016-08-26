@@ -13,7 +13,7 @@ class MyScript(BaseScript):
     command = 'my-script'
 
     @classmethod
-    def add_to_supparser(cls, subparser):
+    def add_to_subparser(cls, subparser):
         parser = subparser.add_parser(cls.command, help='my super cool script')
         parser.add_argument('--my-cool-argument', dest='my_arg', require=True)
         parser.set_defaults(func=MyScript.run)
