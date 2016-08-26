@@ -37,7 +37,7 @@ class Assignment(BaseScript):
                 short_name=args.short_name,
                 id=args.id
             )
-            api = AssignmentApi(args.key, role=args.role, action=args.action, **kwargs)
+            api = AssignmentApi(args.key, args.role, action=args.action, **kwargs)
         except HTTPError as e:
             print(colorize.colored_text(e, colorize.COLOR_RED))
             raise SystemExit()

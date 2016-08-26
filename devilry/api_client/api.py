@@ -18,7 +18,6 @@ class Api(object):
 
     def __init__(self, url, headers=None, queryparams=None, **kwargs):
         self.url = url
-        print(url)
         if queryparams:
             self.url += queryparams
         self.headers = headers or {}
@@ -27,6 +26,8 @@ class Api(object):
         """
         Handles common errors.
 
+        Raises:
+            HTTP400, HTTP401, HTTP403, HTTP404, HTTP405, HTTP429, HTTP503
         """
         if status_code == 400:
             raise HTTP400

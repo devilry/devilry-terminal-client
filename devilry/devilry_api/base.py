@@ -1,22 +1,20 @@
-from devilry.utils import colorize
 import pprint
+from devilry.devilry_api.exceptions import ResultIsNone
 
 
 class BaseAPi(object):
+    """
+    Base api class contains useful utilities.
+    """
 
     @property
     def query_params(self):
+        """list: list of allowed query parameters"""
         raise NotImplementedError('please implement query_params Example query_params = [\'search\', \'ordering\']')
-
-    def pretty_print(self):
-        raise NotImplementedError('please implement pretty_print function')
-
-    def get_json(self):
-        raise NotImplementedError('please implement get_json function')
 
     def craft_queryparam(self, **kwargs):
         """
-        craft query string for url
+        craft query string for urls
         Args:
             **kwargs:
 
@@ -33,4 +31,11 @@ class BaseAPi(object):
         return '/?{}'.format(q_param[1:])
 
     def pretty_print(self):
+        if self.result is None:
+            raise ResultIsNone()
         pprint.pprint(self.result.json())
+
+    def get_json(self):
+        if self.result is None:
+            raise ResultIsNone()
+        return self.result.json()

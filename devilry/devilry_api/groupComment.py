@@ -5,12 +5,38 @@ from devilry.devilry_api.base import BaseAPi
 
 
 class GroupComment(BaseAPi):
+    """
+    Wrapper class for the group comment api
 
-    url = 'group-comment'
+    Attributes:
+        url (str): Url for group comment api.
+        query_params (list): allowed query params.
+        client (Client): client used to interact with api.
+        role (str): This will be appended at the end of the ``self.url``
+        result: response of the request will be stored here.
+
+    """
+
+    url = 'group-comment/'
     query_params = ['ordering', 'id']
 
-    def __init__(self, key, feedback_set, action=None, role=None, **kwargs):
-        # check role
+    def __init__(self, key, role, feedback_set, action=None, **kwargs):
+        """
+        initializes the class.
+
+        Query parameters should be passed as kwargs.
+        Query parameters supported: ordering, id.
+
+        Args:
+            key (str): the api key
+            role (str): this could be student or examiner
+            feedback_set (int): id of feedbackset
+            action [optional(str)]: action to execute
+            **kwargs: Arbitrary keyword arguments, query parameters should be passed as kwargs.
+
+        Raises:
+            NotValidRole
+        """
         if role not in ['student', 'examiner']:
             raise NotValidRole()
 
@@ -23,6 +49,12 @@ class GroupComment(BaseAPi):
             self.new(**kwargs)
 
     def list(self, feedbackset_id, **kwargs):
+        """
+        sends a get request with given query parameters to the api
+        and stores the result in ``self.result``
+        Args:
+            **kwargs: Arbitrary keyword arguments.
+        """
         query_param = self.craft_queryparam(**kwargs)
-        api = self.client.api('{}/{}/{}{}'.format(self.url, self.role, feedbackset_id, query_param))
+        api = self.client.api('{}{}/{}{}'.format(self.url, self.role, feedbackset_id, query_param))
         self.result = api.get()

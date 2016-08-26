@@ -27,7 +27,7 @@ class GroupComment(BaseScript):
     def run(cls, args):
         try:
             kwargs = dict(ordering=args.ordering, id=args.id)
-            api = Gcomment(args.key, args.feedback_set, role=args.role, action=args.action, **kwargs)
+            api = Gcomment(args.key, args.role, args.feedback_set, action=args.action, **kwargs)
 
         except HTTPError as e:
             print(colorize.colored_text(e, colorize.COLOR_RED))

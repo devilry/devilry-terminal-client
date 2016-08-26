@@ -31,7 +31,7 @@ class Feedbackset(BaseScript):
                 group_id=args.group_id,
                 id=args.id
             )
-            api = Fset(args.key, role=args.role, action=args.action, **kwargs)
+            api = Fset(args.key, args.role, action=args.action, **kwargs)
         except HTTPError as e:
             print(colorize.colored_text(e, colorize.COLOR_RED))
             raise SystemExit()

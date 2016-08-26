@@ -20,6 +20,10 @@ class Client(object):
         authenticates the session, this is important if the rest api
         requires authentication by api key or user/password
 
+        Args:
+            key (optional[str]): api key.
+            user (optional[str]): username.
+            password (optional[str]): password.
         """
         self.headers = {}
         if key:
@@ -28,6 +32,10 @@ class Client(object):
     def api(self, path, **kwargs):
         """
         Returns Api class for path
+
+        Args:
+            path (str): Api path.
+            **kwargs: Arbitrary keyword arguments.
 
         Returns:
             :class:`~api_client.api.Api`
