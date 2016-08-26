@@ -25,7 +25,7 @@ class MyScript(BaseScript):
 ```
 
 ### External scripts
-Install yor script here here:
+Install your script here here:
 ```{r, engine='bash', count_lines}
 $ tree
 ├── devilry
