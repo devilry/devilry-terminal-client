@@ -53,7 +53,7 @@ This is not supported yet, but here is the idea.
 1. Create a directory for your local scripts in your home directory:
     ```{r, engine='bash', count_lines}
     $ mkdir /home/$USER/devilry_scripts
-        ```
+    ```
 
 2. Export your local script folder path to your environment:
     ```{r, engine='bash', count_lines}
