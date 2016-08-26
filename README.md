@@ -50,15 +50,15 @@ INSTALLED_SCRIPTS = [
 ### Local scripts
 This is not supported yet, but here is the idea.
 
-* Create a directory for your local scripts in your home directory:
+* Create a directory for your local scripts in your home directory:<br />
     ```{r, engine='bash', count_lines}
     $ mkdir /home/$USER/devilry_scripts
     ```
-* Export your local script folder path to your environment:
+* Export your local script folder path to your environment:<br />
     ```{r, engine='bash', count_lines}
     $ export DEVILRY_LOCAL_SCRIPTS = /home/$USER/devilry_scripts
     ```
-* Create your config.py file:
+* Create your config.py file:<br />
     ```python
     ...
     from myscrip.cli import MyScript
@@ -67,7 +67,7 @@ This is not supported yet, but here is the idea.
         MyScript,
     ]
     ```
-* Your script folder should look like this
+* Your script folder should look like this:<br />
     ```{r, engine='bash', count_lines}
     $ pwd
     /home/user/devilry_scripts
