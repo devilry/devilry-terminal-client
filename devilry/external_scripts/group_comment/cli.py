@@ -1,7 +1,6 @@
 from devilry.utils.basescript import BaseScript
 from devilry.devilry_api.groupComment import GroupComment as Gcomment
 from requests.exceptions import HTTPError
-from devilry.utils import colorize
 from devilry.utils import cliutils
 
 
