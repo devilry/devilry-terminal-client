@@ -50,30 +50,33 @@ INSTALLED_SCRIPTS = [
 ### Local scripts
 This is not supported yet, but here is the idea.
 
-* Create a directory for your local scripts in your home directory:<br />
-```{r, engine='bash', count_lines}
-$ mkdir /home/$USER/devilry_scripts
+1. Create a directory for your local scripts in your home directory:
+    ```{r, engine='bash', count_lines}
+    $ mkdir /home/$USER/devilry_scripts
+        ```
+
+2. Export your local script folder path to your environment:
+    ```{r, engine='bash', count_lines}
+    $ export DEVILRY_LOCAL_SCRIPTS = /home/$USER/devilry_scripts
     ```
-* Export your local script folder path to your environment:<br />
-```{r, engine='bash', count_lines}
-$ export DEVILRY_LOCAL_SCRIPTS = /home/$USER/devilry_scripts
-```
-* Create your config.py file:<br />
-```python
-...
-from myscrip.cli import MyScript
-INSTALLED_SCRIPTS = [
+
+3. Create your config.py file:
+    ```python
     ...
-    MyScript,
-]
-```
-* Your script folder should look like this:<br />
-```{r, engine='bash', count_lines}
-$ pwd
-/home/user/devilry_scripts
-$ tree
-├── myscript
-|   ├── cli.py
-|   ...
-└── config.py
-```
+    from myscrip.cli import MyScript
+    INSTALLED_SCRIPTS = [
+        ...
+        MyScript,
+    ]
+    ```
+
+4. Your script folder should look like this:
+    ```{r, engine='bash', count_lines}
+    $ pwd
+    /home/user/devilry_scripts
+    $ tree
+    ├── myscript
+    |   ├── cli.py
+    |   ...
+    └── config.py
+    ```
