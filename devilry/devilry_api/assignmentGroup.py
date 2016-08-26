@@ -31,8 +31,5 @@ class AssignmentGroup(BaseAPi):
         api = self.client.api('{}{}{}'.format(self.url, self.role, query_param))
         self.result = api.get()
 
-    def pretty_print(self):
-        print(self.result.json())
-
     def get_json(self):
-        self.result.json()
+        return self.result.json()

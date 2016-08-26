@@ -1,5 +1,5 @@
 from devilry.utils.basescript import BaseScript
-from devilry.devilry_api.assignment import Assignment as AssignmentApi
+from devilry.devilry_api.assignmentGroup import AssignmentGroup as AssignmentGroupApi
 from requests.exceptions import HTTPError
 from devilry.utils import colorize
 
@@ -39,7 +39,7 @@ class AssignmentGroup(BaseScript):
                 assignment_id=args.assignment_id,
                 id=args.id
             )
-            api = AssignmentApi(args.key, role=args.role, action=args.action, **kwargs)
+            api = AssignmentGroupApi(args.key, role=args.role, action=args.action, **kwargs)
         except HTTPError as e:
             print(colorize.colored_text(e, colorize.COLOR_RED))
             raise SystemExit()

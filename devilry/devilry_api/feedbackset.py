@@ -4,15 +4,12 @@ from devilry.settings import API_URL
 from devilry.devilry_api.base import BaseAPi
 
 
-class Assignment(BaseAPi):
+class Feedbackset(BaseAPi):
 
-    url = 'assignment/'
+    url = 'feedbackset/'
     query_params = ['ordering',
-                    'search',
-                    'period_short_name',
-                    'subject_short_name',
-                    'short_name',
-                    'id']
+                    'id',
+                    'group_id']
 
     def __init__(self, key, action=None, role=None, **kwargs):
         # check role
@@ -24,11 +21,17 @@ class Assignment(BaseAPi):
         self.role = role
         if action == 'list':
             self.list(**kwargs)
+        elif action == 'new':
+            self.new(**kwargs)
 
     def list(self, **kwargs):
         query_param = self.craft_queryparam(**kwargs)
         api = self.client.api('{}{}{}'.format(self.url, self.role, query_param))
         self.result = api.get()
+
+    def new(self, **kwargs):
+        api = self.client.api('{}{}'.format(self.url, self.role))
+        self.result = api.post(**kwargs)
 
     def get_json(self):
         return self.result.json()

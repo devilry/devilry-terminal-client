@@ -1,3 +1,6 @@
+from devilry.utils import colorize
+import pprint
+
 
 class BaseAPi(object):
 
@@ -28,3 +31,6 @@ class BaseAPi(object):
         if q_param == '':
             return ''
         return '/?{}'.format(q_param[1:])
+
+    def pretty_print(self):
+        pprint.pprint(self.result.json())
