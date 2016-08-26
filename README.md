@@ -51,29 +51,29 @@ INSTALLED_SCRIPTS = [
 This is not supported yet, but here is the idea.
 
 * Create a directory for your local scripts in your home directory:<br />
-    ```{r, engine='bash', count_lines}
-    $ mkdir /home/$USER/devilry_scripts
+```{r, engine='bash', count_lines}
+$ mkdir /home/$USER/devilry_scripts
     ```
 * Export your local script folder path to your environment:<br />
-    ```{r, engine='bash', count_lines}
-    $ export DEVILRY_LOCAL_SCRIPTS = /home/$USER/devilry_scripts
-    ```
+```{r, engine='bash', count_lines}
+$ export DEVILRY_LOCAL_SCRIPTS = /home/$USER/devilry_scripts
+```
 * Create your config.py file:<br />
-    ```python
+```python
+...
+from myscrip.cli import MyScript
+INSTALLED_SCRIPTS = [
     ...
-    from myscrip.cli import MyScript
-    INSTALLED_SCRIPTS = [
-        ...
-        MyScript,
-    ]
-    ```
+    MyScript,
+]
+```
 * Your script folder should look like this:<br />
-    ```{r, engine='bash', count_lines}
-    $ pwd
-    /home/user/devilry_scripts
-    $ tree
-    ├── myscript
-    |   ├── cli.py
-    |   ...
-    └── config.py
-    ```
+```{r, engine='bash', count_lines}
+$ pwd
+/home/user/devilry_scripts
+$ tree
+├── myscript
+|   ├── cli.py
+|   ...
+└── config.py
+```
