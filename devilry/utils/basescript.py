@@ -1,6 +1,6 @@
 class BaseScript(object):
     """
-    This is the base class for any external or local script and should be subclassed when creating script.
+    This is the base class for any external or local script and should be subclassed when creating scripts.
 
     Examples:
         class MyScript(BaseScript):
@@ -47,7 +47,7 @@ class BaseScript(object):
         run is called when the positional argument is the class command (see add_to_subparser).
 
         Args:
-            args: argument parsed by argparse
+            args: arguments parsed by argparse
 
         Raises:
             NotImplementedError
