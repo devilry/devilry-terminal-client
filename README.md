@@ -37,7 +37,7 @@ $ tree
 |   ├── ...
 ├── ...
 ```
-Register your script to config.py
+Register your script in config.py
 ```python
 ..
 from devilry.external_scripts.myscript.cli import MyScript
