@@ -1,6 +1,6 @@
 from requests import api
 
-from devilry.api_client.exceptions import HTTP400, HTTP401, HTTP403, HTTP404, HTTP405, HTTP429, HTTP503
+from devilry.api_client.exceptions import HTTP400, HTTP401, HTTP403, HTTP404, HTTP405, HTTP429, HTTP503, HTTP500
 
 
 class Api(object):
@@ -22,7 +22,7 @@ class Api(object):
             self.url += queryparams
         self.headers = headers or {}
 
-    def handle_errors(self, status_code):
+    def handle_errors(self, status_code, msg=None):
         """
         Handles common errors.
 
@@ -43,6 +43,8 @@ class Api(object):
             raise HTTP429
         if status_code == 503:
             raise HTTP503
+        if status_code == 500:
+            raise HTTP500
 
     def get(self, **kwargs):
         response = api.get(self.url, headers=self.headers, **kwargs)

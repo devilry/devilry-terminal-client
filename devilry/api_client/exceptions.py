@@ -1,6 +1,17 @@
 from requests.exceptions import HTTPError
 
 
+class HTTP500(HTTPError):
+    """
+    The Web server (running the Web Site) encountered an unexpected condition
+    that prevented it from fulfilling the request by the client (e.g. your Web
+    browser or our CheckUpDown robot) for access to the requested URL.
+    """
+
+    def __str__(self):
+        return repr('500 Internal server error')
+
+
 class HTTP400(HTTPError):
     """
 

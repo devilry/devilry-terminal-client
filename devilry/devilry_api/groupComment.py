@@ -46,7 +46,7 @@ class GroupComment(BaseAPi):
         if action == 'list':
             self.list(feedback_set, **kwargs)
         elif action == 'new':
-            self.new(**kwargs)
+            self.new(feedback_set, **kwargs)
 
     def list(self, feedbackset_id, **kwargs):
         """
@@ -58,3 +58,16 @@ class GroupComment(BaseAPi):
         query_param = self.craft_queryparam(**kwargs)
         api = self.client.api('{}{}/{}{}'.format(self.url, self.role, feedbackset_id, query_param))
         self.result = api.get()
+
+    def new(self, feedbackset_id, text=None, **kwargs):
+        """
+        posts a comment to feedbackset_id
+        and stores the result in ``self.result``
+        Args:
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+        """
+        api = self.client.api('{}{}/{}'.format(self.url, self.role, feedbackset_id))
+        self.result = api.post(data={'text': text})
+
