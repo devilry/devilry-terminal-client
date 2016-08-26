@@ -40,7 +40,7 @@ $ tree
 Register your script to config.py
 ```python
 ..
-from devilry.external_scripts.cli import MyScript
+from devilry.external_scripts.myscript.cli import MyScript
 INSTALLED_SCRIPTS = [
     ...
     MyScript,
