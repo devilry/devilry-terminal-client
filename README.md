@@ -3,7 +3,7 @@ Terminal API and client for handling terminal management and customized tasks. C
 
 How to create scripts
 ====================
-Become a real devilry ninja and create your own scritps!
+Become a real devil and create your own scritps!
 
 Example cli.py:
 ```python
