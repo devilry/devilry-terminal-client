@@ -2,6 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
       name='devilry-terminal-client',
+      version='0.1',
       author=(u'Eskil Opdahl Nordland'),
       author_email='devilry-contact@googlegroups.com',
       url='http://devilry.org',
