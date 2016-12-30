@@ -88,4 +88,3 @@ class Assignment(BaseAPi):
         query_param = self.craft_queryparam(**kwargs)
         api = self.client.api('{}{}{}'.format(self.url, self.role, query_param))
         self.result = api.get()
-

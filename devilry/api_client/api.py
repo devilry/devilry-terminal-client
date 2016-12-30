@@ -27,7 +27,7 @@ class Api(object):
         Handles common errors.
 
         Raises:
-            HTTP400, HTTP401, HTTP403, HTTP404, HTTP405, HTTP429, HTTP503
+            HTTP400, HTTP401, HTTP403, HTTP404, HTTP405, HTTP429, HTTP 500, HTTP503
         """
         if status_code == 400:
             raise HTTP400
@@ -39,12 +39,12 @@ class Api(object):
             raise HTTP404
         if status_code == 405:
             raise HTTP405
-        if status_code == 529:
+        if status_code == 429:
             raise HTTP429
-        if status_code == 503:
-            raise HTTP503
         if status_code == 500:
             raise HTTP500
+        if status_code == 503:
+            raise HTTP503
 
     def get(self, **kwargs):
         response = api.get(self.url, headers=self.headers, **kwargs)
@@ -63,5 +63,10 @@ class Api(object):
 
     def patch(self, **kwargs):
         response = api.patch(self.url, headers=self.headers, **kwargs)
+        self.handle_errors(response.status_code)
+        return response
+
+    def delete(self, **kwargs):
+        response = api.delete(self.url, headers=self.headers, **kwargs)
         self.handle_errors(response.status_code)
         return response
