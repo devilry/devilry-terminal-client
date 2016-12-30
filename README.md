@@ -1,6 +1,17 @@
 # devilry-terminal-client
 Terminal API and client for handling terminal management and customized tasks. Closely integrated with specialized api in the main code-base
 
+Install from git repo
+=====================
+```{r, engine='bash', count_lines}
+$ git clone https://github.com/devilry/devilry-terminal-client.git
+$ cd devilry-terminal-client
+$ pip install .
+$ devil
+usage: devil [-h] {assignment,assignment-group,feedbackset,group-comment} ...
+devil: error: too few arguments
+```
+
 How to create scripts
 ====================
 Become a real devil and create your own scritps!
