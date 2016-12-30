@@ -5,6 +5,20 @@ from devilry.api_client import exceptions
 import httpretty
 
 
+class TestApiClientHeaders(unittest.TestCase):
+
+    def setUp(self):
+        self.client = Client('http://localhost:8000/api/')
+        self.client.auth(key='61d4d0b047b4d753c29d1756a4a656045c7df521')
+        self.api = self.client.api('')
+
+    def test_api_key_in_header(self):
+        self.assertEqual(self.api.headers, {'Authorization': 'Token 61d4d0b047b4d753c29d1756a4a656045c7df521'})
+
+    def test_api_key_in_header_client(self):
+        self.assertEqual(self.client.headers, {'Authorization': 'Token 61d4d0b047b4d753c29d1756a4a656045c7df521'})
+
+
 class TestApiClientHTTPSuccess(unittest.TestCase):
 
     def setUp(self):
@@ -12,42 +26,36 @@ class TestApiClientHTTPSuccess(unittest.TestCase):
         client.auth()
         self.api = client.api('')
 
-    def before(self, status, body="", content_type='application/json'):
-        httpretty.register_uri(httpretty.GET, "http://localhost:8000/api/",
-                               status=status, body=body, content_type=content_type)
-        httpretty.register_uri(httpretty.POST, "http://localhost:8000/api/",
-                               status=status, body=body, content_type=content_type)
-        httpretty.register_uri(httpretty.PUT, "http://localhost:8000/api/",
-                               status=status, body=body, content_type=content_type)
-        httpretty.register_uri(httpretty.PATCH, "http://localhost:8000/api/",
-                               status=status, body=body, content_type=content_type)
-        httpretty.register_uri(httpretty.DELETE, "http://localhost:8000/api/",
-                               status=status, body=body, content_type=content_type)
-
     @httpretty.activate
     def test_200_hello_world(self):
-        self.before(200, body='{"hello": "world"}')
+        httpretty.register_uri(httpretty.GET, "http://localhost:8000/api/",
+                               status=200, body='{"hello": "world"}', content_type='application/json')
         response = self.api.get()
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"hello": "world"})
 
+        httpretty.register_uri(httpretty.PUT, "http://localhost:8000/api/",
+                               status=200, body='{"hello": "world"}', content_type='application/json')
         response = self.api.put()
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"hello": "world"})
+
+        httpretty.register_uri(httpretty.PATCH, "http://localhost:8000/api/",
+                               status=200, body='{"hello": "world"}', content_type='application/json')
         response = self.api.patch()
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"hello": "world"})
 
     @httpretty.activate
     def test_204_hello_world(self):
-        self.before(204, body='{"hello": "world"}')
+        httpretty.register_uri(httpretty.DELETE, "http://localhost:8000/api/", status=204)
         response = self.api.delete()
         self.assertEqual(response.status_code, 204)
-        self.assertEqual(response.json(), {"hello": "world"})
 
     @httpretty.activate
     def test_201_hello_world(self):
-        self.before(201, body='{"hello": "world"}')
+        httpretty.register_uri(httpretty.POST, "http://localhost:8000/api/",
+                               status=201, body='{"hello": "world"}', content_type='application/json')
         response = self.api.post()
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.json(), {"hello": "world"})
