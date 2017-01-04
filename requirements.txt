@@ -1,4 +1,9 @@
 httpretty==0.8.14
+mock==2.0.0
+pbr==1.10.0
 pkg-resources==0.0.0
+python-dateutil==2.6.0
 requests==2.10.0
+six==1.10.0
+sure==1.4.0
 termcolor==1.1.0

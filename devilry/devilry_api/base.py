@@ -8,6 +8,15 @@ class BaseAPi(object):
     """
 
     @property
+    def url(self):
+        raise NotImplementedError('please implement url path for api Example: url = "assignment/"')
+
+    @property
+    def allowed_roles(self):
+        raise NotImplementedError('please implement list of allowed roles'
+                                  'Example: allowed_roles = ["exmainer", "student"]')
+
+    @property
     def query_params(self):
         """list: list of allowed query parameters"""
         raise NotImplementedError('please implement query_params Example query_params = [\'search\', \'ordering\']')
@@ -28,7 +37,7 @@ class BaseAPi(object):
                 q_param += '&{}={}'.format(key, value)
         if q_param == '':
             return ''
-        return '/?{}'.format(q_param[1:])
+        return '?{}'.format(q_param[1:])
 
     def pretty_print(self):
         if self.result is None:
@@ -39,3 +48,6 @@ class BaseAPi(object):
         if self.result is None:
             raise ResultIsNone()
         return self.result.json()
+
+    def get_url(self):
+        return '{}{}{}'.format(self.url, self.role, self.query_param)
