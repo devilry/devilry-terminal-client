@@ -78,7 +78,6 @@ class Assignment(BaseAPi):
         query_params (list): allowed query params.
         client (Client): client used to interact with api.
         role (str): This will be appended at the end of the ``self.url``
-
     """
     url = 'assignment/'
     query_params = ['id']
@@ -148,9 +147,9 @@ class Assignment(BaseAPi):
 
     def assignment_group_list(self):
         """
-        returns :class:`devilry.devilry_api.AssignmentGroup` filtered on assignment_id
+        returns :class:`devilry.devilry_api.AssignmentGroupList` filtered on assignment_id
         Returns:
-            list: :class:`devilry.devilry_api.AssignmentGroup` object
+            :class:`devilry.devilry_api.AssignmentGroupList` object
         """
         return AssignmentGroupList(self.client, self.role, parent=self, assignment_id=self.data['id'])
 # class Assignment(BaseAPi):

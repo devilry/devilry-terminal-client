@@ -125,3 +125,40 @@ assignment_group_list_mock_student_and_examiner = """
   }
 ]
 """
+
+feedbackset_mock_examiner_and_student = """
+[
+  {
+    "id": 10,
+    "group_id": 10,
+    "created_datetime": "2016-02-06T15:10:23.061430",
+    "feedbackset_type": "first_attempt",
+    "is_last_in_group": true,
+    "deadline_datetime": "2040-02-14T12:30:00",
+    "created_by_fullname": null
+  }
+]
+"""
+
+feedbackset_list_mock_examiner_and_student = """
+[
+  {
+    "id": 10,
+    "group_id": 10,
+    "created_datetime": "2016-02-06T15:10:23.061430",
+    "feedbackset_type": "first_attempt",
+    "is_last_in_group": true,
+    "deadline_datetime": "2040-02-14T12:30:00",
+    "created_by_fullname": null
+  },
+  {
+    "id": 11,
+    "group_id": 11,
+    "created_datetime": "2016-02-06T15:10:32.192129",
+    "feedbackset_type": "first_attempt",
+    "is_last_in_group": true,
+    "deadline_datetime": "2040-03-15T23:59:00",
+    "created_by_fullname": null
+  }
+]
+"""

@@ -93,7 +93,7 @@ class TestAssignmentGroup(unittest.TestCase):
     @httpretty.activate
     def test_assignment_data_fetched_by_id(self):
         data = json.loads(mocks.assignment_group_mock_student_and_examiner)[0]
-        group = AssignmentGroup(self.client, 'examiner', id=1)
+        group = AssignmentGroup(self.client, 'examiner', id=data['id'])
         httpretty.register_uri(httpretty.GET, 'http://localhost:8000/api/assignment-group/examiner',
                                body=mocks.assignment_group_mock_student_and_examiner)
         self.assertDictEqual(data, group.data)

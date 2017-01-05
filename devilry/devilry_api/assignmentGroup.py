@@ -2,7 +2,7 @@ from devilry.api_client.client import Client
 from devilry.devilry_api.exceptions import NotValidRole
 from devilry.settings import API_URL
 from devilry.devilry_api.base import BaseAPi
-from devilry.devilry_api.feedbackset import Feedbackset
+from devilry.devilry_api.feedbackset import Feedbackset, FeedbacksetList
 
 
 class AssignmentGroupList(BaseAPi):
@@ -76,6 +76,10 @@ class AssignmentGroup(BaseAPi):
     """
     Represents an AssignmentGroup
     Attributes:
+        url (str): Url for assignment api.
+        query_params (list): allowed query params.
+        client (Client): client used to interact with api.
+        role (str): This will be appended at the end of the ``self.url``
     """
 
     url = 'assignment-group/'
@@ -124,6 +128,14 @@ class AssignmentGroup(BaseAPi):
                 return None
             self._data = self.parse_data(json[0])
         return self._data
+
+    def feedbackset_list(self):
+        """
+        Returns :class:`~devilry.devilry_api.FeedbacksetList` filtered on group_id
+        Returns:
+            :class:`devilry.devilry_api.FeedcbaksetList` object
+        """
+        return FeedbacksetList(self.client, self.role, parent=self, group_id=self.data['id'])
 
 # class AssignmentGroup(BaseAPi):
 #     """
