@@ -1,1 +1,2 @@
-from .assignment import AssignmentList, Assignment
+from .assignment import *
+from .assignmentGroup import *

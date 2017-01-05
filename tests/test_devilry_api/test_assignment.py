@@ -35,7 +35,7 @@ class TestAssignmentList(unittest.TestCase):
         )
         httpretty.register_uri(httpretty.GET, 'http://localhost:8000/api/assignment/examiner', body='[]')
         list = assignment_list.assignment_list
-        self.assertEqual(list, None)
+        self.assertIsNone(list)
         expect(httpretty.last_request()).to.have.property("querystring").being.equal({
             'ordering': ['short_name'],
             'search': ['cool'],
@@ -92,9 +92,10 @@ class TestAssignment(unittest.TestCase):
             'id': ['1']
         })
 
-    def test_assignment_data_passed(self):
+    def test_assignment_data_passed_url_and_data(self):
         data = json.loads(mocks.assignment_mock_student_and_examiner)[0]
         assignment = Assignment(self.client, 'examiner', data=data)
+        self.assertEqual(assignment.get_url(), 'assignment/examiner?id={}'.format(data['id']))
         self.assertEqual(data['short_name'], assignment.data['short_name'])
         self.assertEqual(data['id'], assignment.data['id'])
         self.assertEqual(data['long_name'], assignment.data['long_name'])

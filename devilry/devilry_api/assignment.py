@@ -2,7 +2,7 @@ from devilry.api_client.client import Client
 from devilry.devilry_api.exceptions import NotValidRole
 from devilry.settings import API_URL
 from devilry.devilry_api.base import BaseAPi
-from devilry.devilry_api.assignmentGroup import AssignmentGroup
+from devilry.devilry_api.assignmentGroup import AssignmentGroupList
 import dateutil.parser
 
 
@@ -27,6 +27,7 @@ class AssignmentList(BaseAPi):
                     'subject_short_name',
                     'short_name',
                     'id']
+    allowed_roles = ['student', 'examiner']
 
     def __init__(self, client, role, **kwargs):
         """
@@ -37,6 +38,7 @@ class AssignmentList(BaseAPi):
             **kwargs: Arbitrary keyword arguments, query parameters should be passed as kwargs.
         """
         self.client = client
+        self.check_role(role)
         self.role = role
         self._assignment_list = None
         self.result = None
@@ -80,11 +82,12 @@ class Assignment(BaseAPi):
     """
     url = 'assignment/'
     query_params = ['id']
+    allowed_roles = ['student', 'examiner']
 
     def __init__(self, client, role, id=None, data=None):
         """
         If json kwarg is passed we will just insert the json data into self.data.
-        If id is passed we will ask the api for the given
+        If id is passed we will ask the api for the given Assignment
         Args:
             client: :class:`~devilry.api_client.Client`
             role: student, examiner etc...
@@ -94,6 +97,7 @@ class Assignment(BaseAPi):
         if not id and not data:
             raise ValueError('id and data cannot be None at same time!')
         self.client = client
+        self.check_role(role)
         self.role = role
         self._data = None
         self.result = None
@@ -106,9 +110,12 @@ class Assignment(BaseAPi):
 
     def parse_data(self, data):
         """
-        dump data to self._data and create Datetime object of datetime field
+        Parse data
         Args:
-            json: data
+            data: data that should be parsed
+
+        Returns:
+            returns parsed data
         """
         parsed_data = data
         parsed_data['publishing_time'] = dateutil.parser.parse(parsed_data['publishing_time'])
@@ -139,6 +146,13 @@ class Assignment(BaseAPi):
             self._data = self.parse_data(json[0])
         return self._data
 
+    def assignment_group_list(self):
+        """
+        returns :class:`devilry.devilry_api.AssignmentGroup` filtered on assignment_id
+        Returns:
+            list: :class:`devilry.devilry_api.AssignmentGroup` object
+        """
+        return AssignmentGroupList(self.client, self.role, parent=self, assignment_id=self.data['id'])
 # class Assignment(BaseAPi):
 #     """
 #     Wrapper class for the assignment api
