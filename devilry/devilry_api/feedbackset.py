@@ -2,7 +2,7 @@ from devilry.api_client.client import Client
 from devilry.devilry_api.exceptions import NotValidRole
 from devilry.settings import API_URL
 from devilry.devilry_api.base import BaseAPi
-from devilry.devilry_api.groupComment import GroupComment
+from devilry.devilry_api.groupComment import GroupCommentList
 import dateutil.parser
 import json
 
@@ -143,6 +143,12 @@ class Feedbackset(BaseAPi):
         self._data = self.parse_data(json)
         return self._data
 
+    # def download(self, location):
+    #     url = 'feedbackset-download/{}/{}'.format(self.role, self.data['id'])
+    #     api = self.client.api(url)
+    #     response = api.get(stream=True)
+    #
+
     @property
     def data(self):
         """
@@ -163,7 +169,7 @@ class Feedbackset(BaseAPi):
         """
         Refresh data
         Returns:
-            retyrbs dictionary with new data
+            returns dictionary with new data
         """
         self._data = None
         return self.data
@@ -181,6 +187,14 @@ class Feedbackset(BaseAPi):
         parsed_data['created_datetime'] = dateutil.parser.parse(parsed_data['created_datetime'])
         parsed_data['deadline_datetime'] = dateutil.parser.parse(parsed_data['deadline_datetime'])
         return parsed_data
+
+    def groupcomment_list(self):
+        """
+        Returns :class:`~devilry.devilry_api.GroupCommentList` filtered on feedbackset_id
+        Returns:
+            :class:`~devilry.devilry_api.GroupCommentList` object
+        """
+        return GroupCommentList(self.client, self.role, self.data['id'], parent=self)
 
 # class Feedbackset(BaseAPi):
 #     """

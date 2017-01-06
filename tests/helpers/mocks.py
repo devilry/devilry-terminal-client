@@ -162,3 +162,32 @@ feedbackset_list_mock_examiner_and_student = """
   }
 ]
 """
+
+group_comment_mock = """
+[
+  {
+    "id": 1,
+    "feedback_set": 9,
+    "published_datetime": "2016-02-08T11:25:23.021111",
+    "text": "Here is my delivery :)",
+    "visibility": "visible-to-everyone",
+    "part_of_grading": false,
+    "user_fullname": "April Duck",
+    "user_shortname": "april@example.com",
+    "user_role": "student",
+    "created_datetime": "2016-02-08T11:26:30.912519"
+  },
+  {
+    "id": 2,
+    "feedback_set": 9,
+    "published_datetime": "2016-02-08T11:28:00",
+    "text": "Very good work.",
+    "visibility": "visible-to-everyone",
+    "part_of_grading": true,
+    "user_fullname": "God of thunder and Battle",
+    "user_shortname": "thor@example.com",
+    "user_role": "examiner",
+    "created_datetime": "2016-02-08T11:28:23.712892"
+  }
+]
+"""

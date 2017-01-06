@@ -77,4 +77,12 @@ class BaseAPi(object):
         return self.result.json()
 
     def get_url(self):
-        return '{}{}{}'.format(self.url, self.role, self.query_param)
+        """
+        Craft url
+        Returns:
+            returns url
+        """
+        return '{}{}{}{}'.format(self.url,
+                                 self.role,
+                                 '/{}'.format(self.path_param) if hasattr(self, 'path_param') else '',
+                                 self.query_param)
