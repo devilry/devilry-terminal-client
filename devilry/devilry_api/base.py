@@ -1,5 +1,6 @@
 import pprint
 from devilry.devilry_api.exceptions import ResultIsNone
+from devilry.devilry_api.exceptions import NotValidRole
 
 
 class BaseAPi(object):
@@ -33,7 +34,7 @@ class BaseAPi(object):
             ValueError
         """
         if role not in self.allowed_roles:
-            raise ValueError('role {} not allowed'.format(role))
+            raise NotValidRole('role {} not allowed'.format(role))
 
     def craft_queryparam(self, **kwargs):
         """

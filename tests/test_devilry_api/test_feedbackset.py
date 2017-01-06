@@ -1,6 +1,7 @@
 import unittest
 import httpretty
 import json
+from datetime import datetime, timedelta
 from sure import expect
 from devilry.devilry_api import FeedbacksetList, Feedbackset
 from devilry.api_client import Client
@@ -107,3 +108,43 @@ class TestFeedbackset(unittest.TestCase):
         feedbackset1['deadline_datetime'] = feedbackset1['deadline_datetime'].isoformat()
         feedbackset1['created_datetime'] = feedbackset1['created_datetime'].isoformat()
         self.assertDictEqual(data, feedbackset1)
+
+    @httpretty.activate
+    def test_new_feedbackset(self):
+        test_date_deadline = datetime.now() + timedelta(days=10)
+        test_date_created = datetime.now()
+
+        def request_callback(request, uri, headers):
+            post_data = json.loads(json.loads(request.body.decode('utf-8')))
+            response_data = json.loads(mocks.feedbackset_mock_examiner_and_student)[0]
+            response_data['group_id'] = post_data['group_id']
+            response_data['deadline_datetime'] = post_data['deadline_datetime']
+            response_data['feedbackset_type'] = post_data['feedbackset_type']
+            response_data['created_datetime'] = test_date_created.isoformat()
+            return (201, headers, json.dumps(response_data))
+
+        httpretty.register_uri(httpretty.POST, 'http://localhost:8000/api/feedbackset/examiner',
+                               body=request_callback)
+
+        feedbackset = Feedbackset.new(self.client, 'examiner', 1, test_date_deadline)
+        self.assertEqual(feedbackset.data['deadline_datetime'], test_date_deadline)
+        self.assertEqual(feedbackset.data['created_datetime'], test_date_created)
+        self.assertEqual(feedbackset.data['group_id'], 1)
+
+    @httpretty.activate
+    def test_publish_feedbackset(self):
+        data1 = json.loads(mocks.feedbackset_list_mock_examiner_and_student)[0]
+        data2 = json.loads(mocks.feedbackset_list_mock_examiner_and_student)[1]
+
+        httpretty.register_uri(httpretty.PATCH, 'http://localhost:8000/api/feedbackset/examiner',
+                               body=json.dumps(data2))
+        feedbackset = Feedbackset(self.client, 'examiner', data=data1)
+        feedbackset.publish(2)
+        expect(httpretty.last_request()).to.have.property("querystring").being.equal({
+            'id': [str(data1['id'])],
+            'grading_points': ['2']
+        })
+        feedbackset1 = feedbackset.data
+        feedbackset1['deadline_datetime'] = feedbackset1['deadline_datetime'].isoformat()
+        feedbackset1['created_datetime'] = feedbackset1['created_datetime'].isoformat()
+        self.assertDictEqual(data2, feedbackset1)

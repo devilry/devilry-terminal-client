@@ -4,6 +4,7 @@ from devilry.settings import API_URL
 from devilry.devilry_api.base import BaseAPi
 from devilry.devilry_api.groupComment import GroupComment
 import dateutil.parser
+import json
 
 
 class FeedbacksetList(BaseAPi):
@@ -66,7 +67,7 @@ class FeedbacksetList(BaseAPi):
 
 class Feedbackset(BaseAPi):
     url = 'feedbackset/'
-    query_params = ['id']
+    query_params = ['id', 'grading_points']
     allowed_roles = ['student', 'examiner']
 
     def __init__(self, client, role, id=None, data=None, parent=None, **kwargs):
@@ -80,20 +81,67 @@ class Feedbackset(BaseAPi):
             parent: :class:`~devilry.devilry_api.AssignmentGroup`
             **kwargs:
         """
-        if not id and not data:
-            raise ValueError('id and data cannot be None at same time!')
+        # if not id and not data:
+        #     raise ValueError('id and data cannot be None at same time!')
         self.client = client
         self.check_role(role)
         self.role = role
         self.result = None
         self._data = None
         self.parent = parent
-
+        self.query_param = ''
         if data:
             self.query_param = self.craft_queryparam(id=data['id'])
             self._data = self.parse_data(data)
         elif id:
             self.query_param = self.craft_queryparam(id=id)
+
+    @classmethod
+    def new(cls, client, role, group_id, deadline_datetime, feedbackset_type='new_attempt'):
+        """
+        Creates a new feedbackset for assignment group with datetime and feedbackset_type
+
+        Args:
+            client: :class:`~devilry.api_client.Client`
+            role: student, examiner etc...
+            group_id: id of assignment group
+            deadline_datetime: Datetime object
+            feedbackset_type: new_attempt or re_edit
+
+        Returns:
+            :class:`devilry.devilry_api.Feedbackset`
+        """
+        feedbackset = Feedbackset(client, role)
+
+        api = client.api(feedbackset.get_url())
+        json_data = json.dumps({
+            'group_id': group_id,
+            'deadline_datetime': deadline_datetime.isoformat(),
+            'feedbackset_type': feedbackset_type
+        })
+        feedbackset.result = api.post(json=json_data)
+        data = feedbackset.get_json()
+        feedbackset._data = feedbackset.parse_data(data)
+        feedbackset.query_param = feedbackset.craft_queryparam(id=data['id'])
+        return feedbackset
+
+    def publish(self, grading_points):
+        """
+        Publishes a feedbackset with grading points
+        Args:
+            grading_points: grading points
+
+        Returns:
+            returns new data
+        """
+        temp = self.query_param
+        self.query_param = self.craft_queryparam(id=self.data['id'], grading_points=grading_points)
+        api = self.client.api(self.get_url())
+        self.result = api.patch()
+        json = self.get_json()
+        self.query_param = temp
+        self._data = self.parse_data(json)
+        return self._data
 
     @property
     def data(self):
