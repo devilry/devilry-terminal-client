@@ -1,8 +1,9 @@
+from devilry import settings
 from devilry.utils.basescript import BaseScript
-from devilry.devilry_api.groupComment import GroupComment as Gcomment
+from devilry.devilry_api import GroupCommentList
 from requests.exceptions import HTTPError
 from devilry.utils import cliutils
-
+from devilry.api_client import Client
 
 class GroupComment(BaseScript):
 
@@ -14,7 +15,6 @@ class GroupComment(BaseScript):
         cls.parser = subparser.add_parser(cls.command, help='Devilry group comment.')
         cls.parser.add_argument('-k', '--key', dest='key', help='Api key', required=True)
         cls.parser.add_argument('-r', '--role', dest='role', choices=['student', 'examiner'], required=True)
-        cls.parser.add_argument('--list', dest='action', action='store_const', const='list')
         cls.parser.add_argument('--new', dest='action', action='store_const', const='new')
         cls.parser.add_argument('--ordering-asc', dest='ordering_asc',
                                 choices=['id', 'published_datetime', 'part_of_grading'],
@@ -39,13 +39,11 @@ class GroupComment(BaseScript):
             ordering = '-{}'.format(ordering)
         try:
             kwargs = dict(ordering=ordering, id=args.id)
-            api = Gcomment(args.key, args.role, args.feedback_set, action=args.action,
-                           text=args.text or None, **kwargs)
-
+            client = Client(settings.API_URL)
+            client.auth(key=args.key)
+            api = GroupCommentList(client, args.role, args.feedback_set, **kwargs)
+            api.group_comment_list
         except HTTPError as e:
             cliutils.print_error(e)
             raise SystemExit()
-        if args.format == 'json':
-            print(api.get_json())
-        else:
-            api.pretty_print()
+        api.pretty_print()

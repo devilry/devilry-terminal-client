@@ -1,5 +1,6 @@
+from devilry import settings
 from devilry.utils.basescript import BaseScript
-from devilry.devilry_api.assignmentGroup import AssignmentGroup as AssignmentGroupApi
+from devilry.devilry_api import AssignmentGroupList, Client
 from requests.exceptions import HTTPError
 from devilry.utils import cliutils
 
@@ -13,7 +14,6 @@ class AssignmentGroup(BaseScript):
         parser = subparser.add_parser(cls.command, help='Devilry api assignment group.')
         parser.add_argument('-k', '--key', dest='key', help='Api key.', required=True)
         parser.add_argument('-r', '--role', dest='role', choices=['student', 'examiner'], required=True)
-        parser.add_argument('--list', dest='action', action='store_const', const='list', help='List assignment groups.')
         parser.add_argument('--ordering-asc', dest='ordering_asc',
                             choices=['id', 'is_corrected', 'assignment_short_name'],
                             default=None, help='Ascending order.')
@@ -45,11 +45,11 @@ class AssignmentGroup(BaseScript):
                 assignment_id=args.assignment_id,
                 id=args.id
             )
-            api = AssignmentGroupApi(args.key, args.role, action=args.action, **kwargs)
+            client = Client(settings.API_URL)
+            client.auth(key=args.key)
+            api = AssignmentGroupList(client, args.role, **kwargs)
+            api.assignment_group_list
         except HTTPError as e:
             cliutils.print_error(e)
             raise SystemExit()
-        if args.format == 'json':
-            print(api.get_json())
-        else:
-            api.pretty_print()
+        api.pretty_print()

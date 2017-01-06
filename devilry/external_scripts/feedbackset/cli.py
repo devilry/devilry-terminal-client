@@ -1,5 +1,7 @@
+from devilry import settings
 from devilry.utils.basescript import BaseScript
-from devilry.devilry_api.feedbackset import Feedbackset as Fset
+from devilry.devilry_api import FeedbacksetList
+from devilry.api_client import Client
 from requests.exceptions import HTTPError
 from devilry.utils import colorize
 
@@ -13,7 +15,6 @@ class Feedbackset(BaseScript):
         parser = subparser.add_parser(cls.command, help='Devilry api feedback set')
         parser.add_argument('-k', '--key', dest='key', help='Api key.', required=True)
         parser.add_argument('-r', '--role', dest='role', choices=['student', 'examiner'], required=True)
-        parser.add_argument('--list', dest='action', action='store_const', const='list', help='List feedback sets.')
         parser.add_argument('--new', dest='action', action='store_const', const='new', help='Create new feedback set.')
         parser.add_argument('--ordering-asc', dest='ordering_asc',
                             choices=['id', 'deadline_datetime', 'created_datetime'],
@@ -38,11 +39,11 @@ class Feedbackset(BaseScript):
                 group_id=args.group_id,
                 id=args.id
             )
-            api = Fset(args.key, args.role, action=args.action, **kwargs)
+            client = Client(settings.API_URL)
+            client.auth(key=args.key)
+            api = FeedbacksetList(client, args.role, **kwargs)
+            api.feedbackset_list
         except HTTPError as e:
             print(colorize.colored_text(e, colorize.COLOR_RED))
             raise SystemExit()
-        if args.format == 'json':
-            print(api.get_json())
-        else:
-            api.pretty_print()
+        api.pretty_print()
